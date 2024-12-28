@@ -1,4 +1,4 @@
-package project.webproj;
+package project.emsbackend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

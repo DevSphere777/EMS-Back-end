@@ -1,4 +1,4 @@
-package project.webproj.Model;
+package project.emsbackend.Model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

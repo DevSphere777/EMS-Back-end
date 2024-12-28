@@ -1,8 +1,8 @@
-package project.webproj.Repository;
+package project.emsbackend.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import project.webproj.Model.User;
+import project.emsbackend.Model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String username);

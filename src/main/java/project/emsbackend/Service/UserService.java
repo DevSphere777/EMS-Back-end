@@ -1,8 +1,8 @@
-package project.webproj.Service;
+package project.emsbackend.Service;
 
 import org.springframework.stereotype.Service;
-import project.webproj.Model.User;
-import project.webproj.Repository.UserRepository;
+import project.emsbackend.Model.User;
+import project.emsbackend.Repository.UserRepository;
 
 import java.util.List;
 

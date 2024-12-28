@@ -1,10 +1,10 @@
-package project.webproj.Controller;
+package project.emsbackend.Controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.webproj.Model.User;
-import project.webproj.Service.UserService;
+import project.emsbackend.Model.User;
+import project.emsbackend.Service.UserService;
 
 import java.util.List;
 
