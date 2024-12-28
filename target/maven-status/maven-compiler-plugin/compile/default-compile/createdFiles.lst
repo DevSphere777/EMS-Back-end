@@ -1,0 +1,5 @@
+project\emsbackend\Model\User.class
+project\emsbackend\WebprojApplication.class
+project\emsbackend\Service\UserService.class
+project\emsbackend\Controller\UserController.class
+project\emsbackend\Repository\UserRepository.class
