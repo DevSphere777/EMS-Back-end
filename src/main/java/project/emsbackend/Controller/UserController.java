@@ -7,7 +7,7 @@ import project.emsbackend.Model.User;
 import project.emsbackend.Service.UserService;
 
 import java.util.List;
-
+@CrossOrigin
 @RequestMapping("/user")
 @RestController
 public class UserController {
