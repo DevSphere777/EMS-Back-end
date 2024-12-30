@@ -18,7 +18,7 @@ public class UserController {
     @GetMapping("/all")
     private ResponseEntity<List<User>> getAllUsers(){
         if(userService.getUsers().isEmpty())
-            return ResponseEntity.noContent().build();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         else return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
     }
 
@@ -32,7 +32,7 @@ public class UserController {
     @PostMapping("")
     private ResponseEntity<String > addUser(@RequestBody User user){
         if(userService.addUser(user))
-            return new ResponseEntity<>("User successfully added.", HttpStatus.CREATED);
+            return new ResponseEntity<>("User successfully added.", HttpStatus.OK);
         return new ResponseEntity<>("User already exists.", HttpStatus.BAD_REQUEST);
     }
 
@@ -41,8 +41,18 @@ public class UserController {
         User existingUser = userService.getUserById(id);
         if(existingUser == null)
             return new ResponseEntity<>("User does not exist.", HttpStatus.BAD_REQUEST);
-        userService.updateUser(user);
-        return new ResponseEntity<>("User successfully updated.", HttpStatus.OK);
+            else{
+            existingUser.setFirstName(user.getFirstName());
+            existingUser.setLastName(user.getLastName());
+            existingUser.setEmail(user.getEmail());
+            existingUser.setPhone(user.getPhone());
+            existingUser.setUsername(user.getUsername());
+            existingUser.setPassword(user.getPassword());
+            existingUser.setRole(user.getRole());
+            existingUser.setProfession(user.getProfession());
+                userService.updateUser(existingUser);
+                return new ResponseEntity<>("User successfully updated.", HttpStatus.OK);
+            }
     }
 
     @DeleteMapping("{id}")
