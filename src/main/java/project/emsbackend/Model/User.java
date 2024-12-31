@@ -22,6 +22,9 @@ public class User {
     private String role = "USER";
     private String profession;
     private boolean enabled = true;
+    private boolean locked = false;
+    private boolean expired = false;
+    private boolean credentialsExpired = false;
     public Long getId() {
         return id;
     }
@@ -100,5 +103,29 @@ public class User {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
+    public boolean isExpired() {
+        return expired;
+    }
+
+    public void setExpired(boolean expired) {
+        this.expired = expired;
+    }
+
+    public boolean isCredentialsExpired() {
+        return credentialsExpired;
+    }
+
+    public void setCredentialsExpired(boolean credentialsExpired) {
+        this.credentialsExpired = credentialsExpired;
     }
 }

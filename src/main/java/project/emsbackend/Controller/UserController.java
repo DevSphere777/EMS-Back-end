@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import project.emsbackend.Model.User;
@@ -14,7 +15,10 @@ import java.util.List;
 @RequestMapping("/user")
 @RestController
 public class UserController {
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
     private final UserService userService;
+
+
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -34,6 +38,7 @@ public class UserController {
 
     @PostMapping("")
     private ResponseEntity<String > addUser(@RequestBody User user){
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         if(userService.addUser(user))
             return new ResponseEntity<>("User successfully added.", HttpStatus.OK);
         return new ResponseEntity<>("User already exists.", HttpStatus.BAD_REQUEST);
@@ -61,7 +66,10 @@ public class UserController {
                     existingUser.setRole(user.getRole());
                 if(user.getProfession() != null && !user.getProfession().isEmpty())
                     existingUser.setProfession(user.getProfession());
-                user.setEnabled(existingUser.isEnabled());
+                existingUser.setLocked(user.isLocked());
+                existingUser.setEnabled(user.isEnabled());
+                existingUser.setCredentialsExpired(user.isCredentialsExpired());
+                existingUser.setExpired(user.isExpired());
                 userService.updateUser(existingUser);
                 return new ResponseEntity<>("User successfully updated.", HttpStatus.OK);
             }

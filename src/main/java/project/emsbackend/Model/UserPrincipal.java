@@ -32,17 +32,17 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return !user.isExpired();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !user.isLocked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return !user.isCredentialsExpired();
     }
 
     @Override
