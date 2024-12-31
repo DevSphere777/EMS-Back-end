@@ -1,7 +1,10 @@
 package project.emsbackend.Controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+//import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import project.emsbackend.Model.User;
 import project.emsbackend.Service.UserService;
@@ -42,14 +45,23 @@ public class UserController {
         if(existingUser == null)
             return new ResponseEntity<>("User does not exist.", HttpStatus.BAD_REQUEST);
             else{
-            existingUser.setFirstName(user.getFirstName());
-            existingUser.setLastName(user.getLastName());
-            existingUser.setEmail(user.getEmail());
-            existingUser.setPhone(user.getPhone());
-            existingUser.setUsername(user.getUsername());
-            existingUser.setPassword(user.getPassword());
-            existingUser.setRole(user.getRole());
-            existingUser.setProfession(user.getProfession());
+                if(user.getFirstName() != null && !user.getFirstName().isEmpty())
+                    existingUser.setFirstName(user.getFirstName());
+                if(user.getLastName() != null && !user.getLastName().isEmpty())
+                    existingUser.setLastName(user.getLastName());
+                if(user.getEmail() != null && !user.getEmail().isEmpty())
+                    existingUser.setEmail(user.getEmail());
+                if(user.getPhone() != null && !user.getPhone().isEmpty())
+                    existingUser.setPhone(user.getPhone());
+                if(user.getUsername() != null && !user.getUsername().isEmpty())
+                    existingUser.setUsername(user.getUsername());
+                if(user.getPassword() != null && !user.getPassword().isEmpty())
+                    existingUser.setPassword(user.getPassword());
+                if(!user.getRole().equals("USER"))
+                    existingUser.setRole(user.getRole());
+                if(user.getProfession() != null && !user.getProfession().isEmpty())
+                    existingUser.setProfession(user.getProfession());
+                user.setEnabled(existingUser.isEnabled());
                 userService.updateUser(existingUser);
                 return new ResponseEntity<>("User successfully updated.", HttpStatus.OK);
             }
@@ -62,4 +74,5 @@ public class UserController {
         userService.deleteUser(id);
         return new ResponseEntity<>("User successfully deleted.", HttpStatus.OK);
     }
+
 }

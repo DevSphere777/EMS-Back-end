@@ -5,6 +5,7 @@ spring:
     password: ${DATABASE_PASSWORD:12345678}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+
   jpa:
     properties:
       hibernate:
