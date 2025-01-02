@@ -3,7 +3,7 @@ package project.emsbackend.Controller;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +11,10 @@ import project.emsbackend.Model.User;
 import project.emsbackend.Service.UserService;
 
 import java.util.List;
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/user")
 @RestController
 public class UserController {
-    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
     private final UserService userService;
 
 
@@ -24,24 +23,33 @@ public class UserController {
     }
     @GetMapping("/all")
     private ResponseEntity<List<User>> getAllUsers(){
+
         if(userService.getUsers().isEmpty())
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
         else return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
     private ResponseEntity<User> getUserById(@PathVariable long id){
+
         if(userService.getUserById(id) == null)
             return ResponseEntity.noContent().build();
+
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
-    @PostMapping("")
-    private ResponseEntity<String > addUser(@RequestBody User user){
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+    @PostMapping("/register")
+    private ResponseEntity<String > registerUser(@RequestBody User user){
+
         if(userService.addUser(user))
             return new ResponseEntity<>("User successfully added.", HttpStatus.OK);
+
         return new ResponseEntity<>("User already exists.", HttpStatus.BAD_REQUEST);
+    }
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody User user){
+        return new ResponseEntity<>(userService.verify(user), HttpStatus.OK);
     }
 
     @PutMapping("{id}")
