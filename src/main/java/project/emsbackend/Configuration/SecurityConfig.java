@@ -41,11 +41,13 @@ public class SecurityConfig {
         return http.cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/user/register", "/", "/user/login").permitAll()
+                        .requestMatchers("/register", "/", "/login").permitAll()
+//                        .requestMatchers("/user/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
-                //.formLogin(Customizer.withDefaults())
+//                .formLogin(Customizer.withDefaults())
+//                .oauth2Login(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
-                .logout(Customizer.withDefaults())
+//                .logout(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -54,10 +56,10 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        configuration.setAllowCredentials(true);
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }

@@ -8,6 +8,17 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+    open-in-view:
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          google:
+#            client-id: ''
+#            client-secret:
+#          github:
+#            client-secret:
+#            client-id: ''
 logging:
   level:
     org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer: ERROR

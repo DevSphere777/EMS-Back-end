@@ -40,8 +40,28 @@ public class UserService {
         return false;
     }
 
-    public void updateUser(User user) {
-        userRepository.save(user);
+    public void updateUser(User existingUser, User updatingUser) {
+        if(updatingUser.getFirstName() != null && !updatingUser.getFirstName().isEmpty())
+            existingUser.setFirstName(updatingUser.getFirstName());
+        if(updatingUser.getLastName() != null && !updatingUser.getLastName().isEmpty())
+            existingUser.setLastName(updatingUser.getLastName());
+        if(updatingUser.getEmail() != null && !updatingUser.getEmail().isEmpty())
+            existingUser.setEmail(updatingUser.getEmail());
+        if(updatingUser.getPhone() != null && !updatingUser.getPhone().isEmpty())
+            existingUser.setPhone(updatingUser.getPhone());
+        if(updatingUser.getUsername() != null && !updatingUser.getUsername().isEmpty())
+            existingUser.setUsername(updatingUser.getUsername());
+        if(updatingUser.getPassword() != null && !updatingUser.getPassword().isEmpty())
+            existingUser.setPassword(updatingUser.getPassword());
+        if(!updatingUser.getRole().equals("USER"))
+            existingUser.setRole(updatingUser.getRole());
+        if(updatingUser.getProfession() != null && !updatingUser.getProfession().isEmpty())
+            existingUser.setProfession(updatingUser.getProfession());
+        existingUser.setLocked(updatingUser.isLocked());
+        existingUser.setEnabled(updatingUser.isEnabled());
+        existingUser.setCredentialsExpired(updatingUser.isCredentialsExpired());
+        existingUser.setExpired(updatingUser.isExpired());
+        userRepository.save(existingUser);
     }
 
     public void deleteUser(long id) {
@@ -51,8 +71,8 @@ public class UserService {
     public String verify(User user){
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
-        if( authentication.isAuthenticated())
+        if(authentication.isAuthenticated())
             return jwtService.generateToken(user.getEmail());
-        return "fail";
+        return "Failed to authenticate";
     }
 }

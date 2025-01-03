@@ -39,18 +39,6 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/register")
-    private ResponseEntity<String > registerUser(@RequestBody User user){
-
-        if(userService.addUser(user))
-            return new ResponseEntity<>("User successfully added.", HttpStatus.OK);
-
-        return new ResponseEntity<>("User already exists.", HttpStatus.BAD_REQUEST);
-    }
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user){
-        return new ResponseEntity<>(userService.verify(user), HttpStatus.OK);
-    }
 
     @PutMapping("{id}")
     private ResponseEntity<String> updateUser(@PathVariable long id,@RequestBody User user){
@@ -58,27 +46,7 @@ public class UserController {
         if(existingUser == null)
             return new ResponseEntity<>("User does not exist.", HttpStatus.BAD_REQUEST);
             else{
-                if(user.getFirstName() != null && !user.getFirstName().isEmpty())
-                    existingUser.setFirstName(user.getFirstName());
-                if(user.getLastName() != null && !user.getLastName().isEmpty())
-                    existingUser.setLastName(user.getLastName());
-                if(user.getEmail() != null && !user.getEmail().isEmpty())
-                    existingUser.setEmail(user.getEmail());
-                if(user.getPhone() != null && !user.getPhone().isEmpty())
-                    existingUser.setPhone(user.getPhone());
-                if(user.getUsername() != null && !user.getUsername().isEmpty())
-                    existingUser.setUsername(user.getUsername());
-                if(user.getPassword() != null && !user.getPassword().isEmpty())
-                    existingUser.setPassword(user.getPassword());
-                if(!user.getRole().equals("USER"))
-                    existingUser.setRole(user.getRole());
-                if(user.getProfession() != null && !user.getProfession().isEmpty())
-                    existingUser.setProfession(user.getProfession());
-                existingUser.setLocked(user.isLocked());
-                existingUser.setEnabled(user.isEnabled());
-                existingUser.setCredentialsExpired(user.isCredentialsExpired());
-                existingUser.setExpired(user.isExpired());
-                userService.updateUser(existingUser);
+                userService.updateUser(existingUser, user);
                 return new ResponseEntity<>("User successfully updated.", HttpStatus.OK);
             }
     }
@@ -90,5 +58,6 @@ public class UserController {
         userService.deleteUser(id);
         return new ResponseEntity<>("User successfully deleted.", HttpStatus.OK);
     }
+
 
 }
