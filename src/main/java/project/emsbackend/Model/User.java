@@ -1,7 +1,13 @@
 package project.emsbackend.Model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Fetch;
 
 import java.util.List;
 
@@ -24,8 +30,14 @@ public class User {
     private boolean locked = false;
     private boolean expired = false;
     private boolean credentialsExpired = false;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_assignment",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "assignment_id")
+    )
     private List<Assignment> assignments;
+
     public Long getId() {
         return id;
     }
@@ -64,10 +76,6 @@ public class User {
 
     public String getRole() {
         return role;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setFirstName(String firstName) {

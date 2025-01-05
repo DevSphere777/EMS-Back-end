@@ -1,8 +1,13 @@
 package project.emsbackend.Model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
 
 import java.util.List;
 
@@ -15,15 +20,11 @@ public class Assignment {
     private Long id;
     private String title;
     private String description;
-    @ManyToMany
+    @ManyToMany(mappedBy = "assignments", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<User> users;
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getTitle() {

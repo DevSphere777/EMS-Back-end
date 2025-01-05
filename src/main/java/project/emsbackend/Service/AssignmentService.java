@@ -1,12 +1,14 @@
 package project.emsbackend.Service;
 
+import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import project.emsbackend.Model.Assignment;
 import project.emsbackend.Model.User;
 import project.emsbackend.Repository.AssignmentRepository;
 
 import java.util.List;
-
 @Service
 public class AssignmentService {
     private final AssignmentRepository assignmentRepository;
@@ -15,19 +17,18 @@ public class AssignmentService {
         this.assignmentRepository = assignmentRepository;
     }
 
-
-    public List<Assignment> getAllAssignments() {
+    @Transactional
+    public List<Assignment> getAllAssignment() {
         return assignmentRepository.findAll();
     }
 
     public boolean addAssignment(Assignment assignment) {
-        if(assignmentRepository.existsById(assignment.getId()))
+        if(assignmentRepository.existsByTitle(assignment.getTitle()))
             return false;
-        for(User user : assignment.getUsers())
-            user.getAssignments().add(assignment);
-
-        assignmentRepository.save(assignment);
-        return true;
+        for (User user : assignment.getUsers())
+                user.getAssignments().add(assignment);
+            assignmentRepository.save(assignment);
+            return true;
     }
 
     public Assignment findById(long id) {

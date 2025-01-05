@@ -20,7 +20,7 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-    @GetMapping()
+    @GetMapping
     private ResponseEntity<List<User>> getAllUsers(){
 
         if(userService.getUsers().isEmpty())
@@ -60,10 +60,10 @@ public class UserController {
 
     @GetMapping("{id}/assignment")
     private ResponseEntity<List<Assignment>> getAssignments(@PathVariable long id){
-        if(userService.getAssignmentsById(id) == null)
+        if(userService.getAssignmentById(id) == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         else
-            return new ResponseEntity<>(userService.getAssignmentsById(id), HttpStatus.OK);
+            return new ResponseEntity<>(userService.getAssignmentById(id), HttpStatus.OK);
     }
 
 }

@@ -21,11 +21,11 @@ public class AssignmentController {
     }
 
     @GetMapping
-    private ResponseEntity<List<Assignment>> userAssignments(){
-        if(assignmentService.getAllAssignments() == null)
+    private ResponseEntity<List<Assignment>> userAssignment(){
+        if(assignmentService.getAllAssignment() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         else
-            return new ResponseEntity<>(assignmentService.getAllAssignments(), HttpStatus.OK);
+            return new ResponseEntity<>(assignmentService.getAllAssignment(), HttpStatus.OK);
     }
     @PostMapping
     private ResponseEntity<String> createAssignment(@RequestBody Assignment assignment){

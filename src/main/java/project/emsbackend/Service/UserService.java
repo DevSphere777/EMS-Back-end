@@ -1,5 +1,6 @@
 package project.emsbackend.Service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,6 +11,7 @@ import project.emsbackend.Model.Assignment;
 import project.emsbackend.Model.User;
 import project.emsbackend.Repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,7 +25,7 @@ public class UserService {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
     }
-
+    @Transactional
     public List<User> getUsers() {
         return userRepository.findAll();
     }
@@ -78,7 +80,10 @@ public class UserService {
         return "Failed to authenticate";
     }
 
-    public List<Assignment> getAssignmentsById(long userId) {
-        return userRepository.getAssignmentsById(userId);
+    public List<Assignment> getAssignmentById(long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if(user!=null)
+            return user.getAssignments();
+        else return new ArrayList<>();
     }
 }
