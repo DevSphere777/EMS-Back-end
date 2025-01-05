@@ -1,10 +1,9 @@
 package project.emsbackend.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -25,6 +24,8 @@ public class User {
     private boolean locked = false;
     private boolean expired = false;
     private boolean credentialsExpired = false;
+    @ManyToMany
+    private List<Assignment> assignments;
     public Long getId() {
         return id;
     }
@@ -127,5 +128,13 @@ public class User {
 
     public void setCredentialsExpired(boolean credentialsExpired) {
         this.credentialsExpired = credentialsExpired;
+    }
+
+    public List<Assignment> getAssignments() {
+        return assignments;
+    }
+
+    public void setAssignments(List<Assignment> assignments) {
+        this.assignments = assignments;
     }
 }

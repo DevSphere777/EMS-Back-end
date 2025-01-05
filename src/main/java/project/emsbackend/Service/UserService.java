@@ -1,10 +1,12 @@
 package project.emsbackend.Service;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import project.emsbackend.Model.Assignment;
 import project.emsbackend.Model.User;
 import project.emsbackend.Repository.UserRepository;
 
@@ -74,5 +76,9 @@ public class UserService {
         if(authentication.isAuthenticated())
             return jwtService.generateToken(user.getEmail());
         return "Failed to authenticate";
+    }
+
+    public List<Assignment> getAssignmentsById(long userId) {
+        return userRepository.getAssignmentsById(userId);
     }
 }

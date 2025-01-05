@@ -7,21 +7,20 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import project.emsbackend.Model.Assignment;
 import project.emsbackend.Model.User;
 import project.emsbackend.Service.UserService;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/user")
 @RestController
 public class UserController {
     private final UserService userService;
 
-
     public UserController(UserService userService) {
         this.userService = userService;
     }
-    @GetMapping("/all")
+    @GetMapping()
     private ResponseEntity<List<User>> getAllUsers(){
 
         if(userService.getUsers().isEmpty())
@@ -59,5 +58,12 @@ public class UserController {
         return new ResponseEntity<>("User successfully deleted.", HttpStatus.OK);
     }
 
+    @GetMapping("{id}/assignment")
+    private ResponseEntity<List<Assignment>> getAssignments(@PathVariable long id){
+        if(userService.getAssignmentsById(id) == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(userService.getAssignmentsById(id), HttpStatus.OK);
+    }
 
 }
