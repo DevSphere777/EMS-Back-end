@@ -10,6 +10,8 @@ import project.emsbackend.Model.User;
 import project.emsbackend.Repository.AssignmentRepository;
 import project.emsbackend.Repository.UserRepository;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 @Service
 public class AssignmentService {
@@ -45,9 +47,28 @@ public class AssignmentService {
     }
 
     public void updateAssignment(Assignment existingAssignment, Assignment assignment) {
-        existingAssignment.setTitle(assignment.getTitle());
-        existingAssignment.setDescription(assignment.getDescription());
-        existingAssignment.setUsers(assignment.getUsers());
+
+
+
+        if(assignment.getTitle() != null && !assignment.getTitle().isEmpty())
+            existingAssignment.setTitle(assignment.getTitle());
+        if(assignment.getDescription() != null && !assignment.getDescription().isEmpty())
+            existingAssignment.setDescription(assignment.getDescription());
+        if(assignment.getUsers() != null && !assignment.getUsers().isEmpty()){
+            for(User user : existingAssignment.getUsers()) {
+                if (!assignment.getUsers().contains(user)) {
+                    user.getAssignments().remove(existingAssignment);
+                    userRepository.save(user);
+                }
+            }
+            for(User user : assignment.getUsers()){
+                if(!existingAssignment.getUsers().contains(user)) {
+                    user.getAssignments().add(existingAssignment);
+                    userRepository.save(user);
+                }
+            }
+            assignmentRepository.save(existingAssignment);
+        }
         assignmentRepository.save(existingAssignment);
     }
 

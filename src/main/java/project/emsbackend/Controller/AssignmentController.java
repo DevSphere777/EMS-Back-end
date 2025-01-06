@@ -64,5 +64,4 @@ public class AssignmentController {
             return new ResponseEntity<>("Assignment deleted successfully", HttpStatus.OK);
         }
     }
-
 }
