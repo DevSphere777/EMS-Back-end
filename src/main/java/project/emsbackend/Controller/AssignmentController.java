@@ -27,6 +27,13 @@ public class AssignmentController {
         else
             return new ResponseEntity<>(assignmentService.getAllAssignment(), HttpStatus.OK);
     }
+    @GetMapping("{id}")
+    private ResponseEntity<Assignment> getAssignment(@PathVariable long id){
+        if(assignmentService.findById(id) != null){
+            return new ResponseEntity<>(assignmentService.findById(id), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
     @PostMapping
     private ResponseEntity<String> createAssignment(@RequestBody Assignment assignment){
         if(assignmentService.addAssignment(assignment))

@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.emsbackend.Model.Assignment;
 import project.emsbackend.Model.User;
+import project.emsbackend.Repository.AssignmentRepository;
 import project.emsbackend.Repository.UserRepository;
 
 import java.util.ArrayList;
@@ -17,15 +18,21 @@ import java.util.List;
 @Service
 public class UserService {
     private final JWTService jwtService;
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final AssignmentRepository assignmentRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
     private final AuthenticationManager authenticationManager;
-    public UserService(JWTService jwtService, UserRepository userRepository, AuthenticationManager authenticationManager) {
+
+    public UserService(JWTService jwtService,
+                       UserRepository userRepository,
+                       AssignmentRepository assignmentRepository,
+                       AuthenticationManager authenticationManager) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
+        this.assignmentRepository = assignmentRepository;
         this.authenticationManager = authenticationManager;
     }
-    @Transactional
+
     public List<User> getUsers() {
         return userRepository.findAll();
     }
@@ -61,6 +68,9 @@ public class UserService {
             existingUser.setRole(updatingUser.getRole());
         if(updatingUser.getProfession() != null && !updatingUser.getProfession().isEmpty())
             existingUser.setProfession(updatingUser.getProfession());
+        if(updatingUser.getAssignments() != null && !updatingUser.getAssignments().isEmpty()){
+            existingUser.setAssignments(updatingUser.getAssignments());
+        }
         existingUser.setLocked(updatingUser.isLocked());
         existingUser.setEnabled(updatingUser.isEnabled());
         existingUser.setCredentialsExpired(updatingUser.isCredentialsExpired());
@@ -69,6 +79,11 @@ public class UserService {
     }
 
     public void deleteUser(long id) {
+        User user = userRepository.findById(id).orElse(new User());
+        for(Assignment assignment : user.getAssignments()) {
+            assignment.getUsers().remove(user);
+            assignmentRepository.save(assignment);
+        }
         userRepository.deleteById(id);
     }
 
@@ -82,8 +97,10 @@ public class UserService {
 
     public List<Assignment> getAssignmentById(long userId) {
         User user = userRepository.findById(userId).orElse(null);
-        if(user!=null)
+        if(user!=null){
+            int n = user.getAssignments().size();
             return user.getAssignments();
+        }
         else return new ArrayList<>();
     }
 }
