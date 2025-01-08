@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.emsbackend.Model.Assignment;
 import project.emsbackend.Service.AssignmentService;
-import project.emsbackend.Service.UserService;
 
 import java.util.List;
 

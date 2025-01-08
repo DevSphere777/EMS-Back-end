@@ -1,17 +1,11 @@
 package project.emsbackend.Service;
 
-import jakarta.transaction.Transactional;
-import org.antlr.v4.runtime.misc.MurmurHash;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import project.emsbackend.Model.Assignment;
 import project.emsbackend.Model.User;
 import project.emsbackend.Repository.AssignmentRepository;
 import project.emsbackend.Repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 @Service
 public class AssignmentService {

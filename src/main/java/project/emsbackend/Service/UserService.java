@@ -1,7 +1,5 @@
 package project.emsbackend.Service;
 
-import jakarta.transaction.Transactional;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -98,7 +96,6 @@ public class UserService {
     public List<Assignment> getAssignmentById(long userId) {
         User user = userRepository.findById(userId).orElse(null);
         if(user!=null){
-            int n = user.getAssignments().size();
             return user.getAssignments();
         }
         else return new ArrayList<>();

@@ -3,8 +3,6 @@ package project.emsbackend.Model;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.Fetch;
 
 import java.util.List;
 
