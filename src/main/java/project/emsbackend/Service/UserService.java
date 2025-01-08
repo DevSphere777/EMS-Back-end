@@ -1,6 +1,5 @@
 package project.emsbackend.Service;
 
-import jakarta.validation.constraints.Email;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,7 +14,7 @@ import java.util.UUID;
 @Service
 public class UserService {
     private final JWTService jwtService;
-    UserRepository userRepository;
+    private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;

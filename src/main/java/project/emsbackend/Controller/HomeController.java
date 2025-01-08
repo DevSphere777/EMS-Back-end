@@ -1,11 +1,8 @@
 package project.emsbackend.Controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import project.emsbackend.Event.RegistrationCompleteEvent;
 import project.emsbackend.Model.User;

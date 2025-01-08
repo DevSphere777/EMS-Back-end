@@ -1,22 +1,16 @@
 package project.emsbackend.Controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import project.emsbackend.Model.User;
 import project.emsbackend.Service.UserService;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/user")
 @RestController
 public class UserController {
     private final UserService userService;
-
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -39,7 +33,6 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
-
     @PutMapping("{id}")
     private ResponseEntity<String> updateUser(@PathVariable long id,@RequestBody User user){
         User existingUser = userService.getUserById(id);
@@ -58,6 +51,5 @@ public class UserController {
         userService.deleteUser(id);
         return new ResponseEntity<>("User successfully deleted.", HttpStatus.OK);
     }
-
 
 }
