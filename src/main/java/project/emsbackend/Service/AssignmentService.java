@@ -35,8 +35,10 @@ public class AssignmentService {
             return false;
         assignmentRepository.save(assignment);
         for (User user : assignment.getUsers()){
-            user.getAssignments().add(assignment);
-            userRepository.save(user);
+            if(!user.getAssignments().contains(assignment)){
+                user.getAssignments().add(assignment);
+                userRepository.save(user);
+            }
         }
 
         return true;
@@ -54,7 +56,8 @@ public class AssignmentService {
             existingAssignment.setTitle(assignment.getTitle());
         if(assignment.getDescription() != null && !assignment.getDescription().isEmpty())
             existingAssignment.setDescription(assignment.getDescription());
-        if(assignment.getUsers() != null && !assignment.getUsers().isEmpty()){
+        assignmentRepository.save(existingAssignment);
+        if(assignment.getUsers() != null){
             for(User user : existingAssignment.getUsers()) {
                 if (!assignment.getUsers().contains(user)) {
                     user.getAssignments().remove(existingAssignment);
@@ -67,7 +70,6 @@ public class AssignmentService {
                     userRepository.save(user);
                 }
             }
-            assignmentRepository.save(existingAssignment);
         }
         assignmentRepository.save(existingAssignment);
     }
