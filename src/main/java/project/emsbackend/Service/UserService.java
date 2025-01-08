@@ -1,5 +1,6 @@
 package project.emsbackend.Service;
 
+import jakarta.validation.constraints.Email;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -9,6 +10,7 @@ import project.emsbackend.Model.User;
 import project.emsbackend.Repository.UserRepository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -16,10 +18,12 @@ public class UserService {
     UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
     private final AuthenticationManager authenticationManager;
-    public UserService(JWTService jwtService, UserRepository userRepository, AuthenticationManager authenticationManager) {
+    private final EmailService emailService;
+    public UserService(JWTService jwtService, UserRepository userRepository, AuthenticationManager authenticationManager, EmailService emailService) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
+        this.emailService = emailService;
     }
 
     public List<User> getUsers() {
@@ -34,10 +38,24 @@ public class UserService {
             user.setUsername(user.getLastName() + user.getFirstName().charAt(0)
                     + (Integer.parseInt(String.valueOf(user.getPhone().charAt(user.getPhone().length()-1))) + 4));
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+
+            String token = UUID.randomUUID().toString();
+            user.setMailVerificationToken(token);
+
             userRepository.save(user);
+            String confirmationURL = "https://emsbackend-h3xs.onrender.com/verify-email?token=" + token;
+            emailService.sendEmail(user.getEmail(), "Email Verification",
+                    "Click link to verify your email: " + confirmationURL);
             return true;
         }
         return false;
+    }
+    public String validateVerificationToken(String token) {
+        User user = userRepository.findByMailVerificationToken(token);
+        if(user == null) return "Invalid verification token";
+        user.setEnabled(true);
+        userRepository.save(user);
+        return "Valid";
     }
 
     public void updateUser(User existingUser, User updatingUser) {
@@ -75,4 +93,7 @@ public class UserService {
             return jwtService.generateToken(user.getEmail());
         return "Failed to authenticate";
     }
+
+
+
 }

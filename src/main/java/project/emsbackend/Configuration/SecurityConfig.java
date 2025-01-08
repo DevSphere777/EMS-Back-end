@@ -41,7 +41,7 @@ public class SecurityConfig {
         return http.cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/register", "/", "/login").permitAll()
+                        .requestMatchers("/register", "/**", "/login", "/verify-email").permitAll()
 //                        .requestMatchers("/user/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
 //                .formLogin(Customizer.withDefaults())

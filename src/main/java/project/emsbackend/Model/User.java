@@ -21,7 +21,8 @@ public class User {
     private String password;
     private String role = "USER";
     private String profession;
-    private boolean enabled = true;
+    private String mailVerificationToken;
+    private boolean enabled = false;
     private boolean locked = false;
     private boolean expired = false;
     private boolean credentialsExpired = false;
@@ -127,5 +128,13 @@ public class User {
 
     public void setCredentialsExpired(boolean credentialsExpired) {
         this.credentialsExpired = credentialsExpired;
+    }
+
+    public String getMailVerificationToken() {
+        return mailVerificationToken;
+    }
+
+    public void setMailVerificationToken(String mailVerificationToken) {
+        this.mailVerificationToken = mailVerificationToken;
     }
 }
