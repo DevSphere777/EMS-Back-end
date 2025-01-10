@@ -1,14 +1,16 @@
 package project.emsbackend.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.*;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +28,14 @@ public class User {
     private boolean locked = false;
     private boolean expired = false;
     private boolean credentialsExpired = false;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_assignment",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "assignment_id")
+    )
+    private List<Assignment> assignments;
+
     public Long getId() {
         return id;
     }
@@ -64,10 +74,6 @@ public class User {
 
     public String getRole() {
         return role;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setFirstName(String firstName) {
@@ -136,5 +142,11 @@ public class User {
 
     public void setMailVerificationToken(String mailVerificationToken) {
         this.mailVerificationToken = mailVerificationToken;
+    public List<Assignment> getAssignments() {
+        return assignments;
+    }
+
+    public void setAssignments(List<Assignment> assignments) {
+        this.assignments = assignments;
     }
 }

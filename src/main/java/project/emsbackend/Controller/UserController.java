@@ -3,6 +3,7 @@ package project.emsbackend.Controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.emsbackend.Model.Assignment;
 import project.emsbackend.Model.User;
 import project.emsbackend.Service.UserService;
 
@@ -15,7 +16,7 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-    @GetMapping("/all")
+    @GetMapping
     private ResponseEntity<List<User>> getAllUsers(){
 
         if(userService.getUsers().isEmpty())
@@ -50,6 +51,14 @@ public class UserController {
             return new ResponseEntity<>("User does not exist.", HttpStatus.BAD_REQUEST);
         userService.deleteUser(id);
         return new ResponseEntity<>("User successfully deleted.", HttpStatus.OK);
+    }
+
+    @GetMapping("{id}/assignment")
+    private ResponseEntity<List<Assignment>> getAssignments(@PathVariable long id){
+        if(userService.getAssignmentById(id) == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(userService.getAssignmentById(id), HttpStatus.OK);
     }
 
 }

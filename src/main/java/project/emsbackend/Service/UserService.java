@@ -5,9 +5,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import project.emsbackend.Model.Assignment;
 import project.emsbackend.Model.User;
+import project.emsbackend.Repository.AssignmentRepository;
 import project.emsbackend.Repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,8 +22,17 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
     public UserService(JWTService jwtService, UserRepository userRepository, AuthenticationManager authenticationManager, EmailService emailService) {
+    private final AssignmentRepository assignmentRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
+    private final AuthenticationManager authenticationManager;
+
+    public UserService(JWTService jwtService,
+                       UserRepository userRepository,
+                       AssignmentRepository assignmentRepository,
+                       AuthenticationManager authenticationManager) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
+        this.assignmentRepository = assignmentRepository;
         this.authenticationManager = authenticationManager;
         this.emailService = emailService;
     }
@@ -74,6 +86,9 @@ public class UserService {
             existingUser.setRole(updatingUser.getRole());
         if(updatingUser.getProfession() != null && !updatingUser.getProfession().isEmpty())
             existingUser.setProfession(updatingUser.getProfession());
+        if(updatingUser.getAssignments() != null && !updatingUser.getAssignments().isEmpty()){
+            existingUser.setAssignments(updatingUser.getAssignments());
+        }
         existingUser.setLocked(updatingUser.isLocked());
         existingUser.setEnabled(updatingUser.isEnabled());
         existingUser.setCredentialsExpired(updatingUser.isCredentialsExpired());
@@ -82,6 +97,11 @@ public class UserService {
     }
 
     public void deleteUser(long id) {
+        User user = userRepository.findById(id).orElse(new User());
+        for(Assignment assignment : user.getAssignments()) {
+            assignment.getUsers().remove(user);
+            assignmentRepository.save(assignment);
+        }
         userRepository.deleteById(id);
     }
 
@@ -95,4 +115,11 @@ public class UserService {
 
 
 
+    public List<Assignment> getAssignmentById(long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if(user!=null){
+            return user.getAssignments();
+        }
+        else return new ArrayList<>();
+    }
 }
