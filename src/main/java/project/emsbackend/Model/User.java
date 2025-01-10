@@ -142,11 +142,14 @@ public class User {
 
     public void setMailVerificationToken(String mailVerificationToken) {
         this.mailVerificationToken = mailVerificationToken;
-    public List<Assignment> getAssignments() {
+    }
+
+    public void setAssignments (List < Assignment > assignments) {
+        this.assignments = assignments;
+    }
+
+    public List<Assignment> getAssignments () {
         return assignments;
     }
 
-    public void setAssignments(List<Assignment> assignments) {
-        this.assignments = assignments;
-    }
 }

@@ -12,4 +12,6 @@ project\emsbackend\Service\JWTService.class
 project\emsbackend\Model\UserPrincipal.class
 project\emsbackend\Model\User.class
 project\emsbackend\Service\MyUserDetailsService.class
+project\emsbackend\Event\RegistrationCompleteEvent.class
 project\emsbackend\Controller\AssignmentController.class
+project\emsbackend\Service\EmailService.class
